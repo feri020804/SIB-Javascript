@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manajemen Produk</title>
+  </head>
+  <body>
+    <h2>Manajemen Produk Toko Online</h2>
+
+    <div>
+      <input type="text" id="nama" placeholder="Nama Produk" />
+      <input type="number" id="harga" placeholder="Harga" />
+      <input type="number" id="stok" placeholder="Stok" />
+      <button id="btnTambah">Tambah Produk</button>
+    </div>
+
+    <div>
+      <input
+        type="text"
+        id="hapusNama"
+        placeholder="Nama Produk yang Dihapus"
+      />
+      <button id="btnHapus">Hapus Produk</button>
+    </div>
+
+    <h3>Daftar Produk:</h3>
+    <ul id="daftarProduk"></ul>
+
+    <script>
+      // produk awal
+      let produkList = [
+        { nama: "Laptop", harga: 7500000, stok: 10 },
+        { nama: "Smartphone", harga: 5000000, stok: 7 },
+        { nama: "Tablet", harga: 3000000, stok: 5 },
+        { nama: "Headphone", harga: 500000, stok: 15 },
+        { nama: "Smartwatch", harga: 1500000, stok: 8 },
+      ];
+
+      // Fungsi tampilkan produk pakai destructuring
+      function tampilkanProduk(list = produkList) {
+        const ul = document.getElementById("daftarProduk");
+        ul.innerHTML = "";
+        list.forEach(({ nama, harga, stok }) => {
+          const li = document.createElement("li");
+          li.textContent = `${nama} - Rp${harga} (stok: ${stok})`;
+          ul.appendChild(li);
+        });
+      }
+
+      // untuk menamambah produk pakai Rest + Spread
+      function tambahProduk(...produkBaru) {
+        produkList = [...produkList, ...produkBaru];
+        tampilkanProduk();
+      }
+
+      // untuk menghapus produk berdasarkan nama
+      function hapusProduk(nama) {
+        produkList = produkList.filter(
+          (p) => p.nama.toLowerCase() !== nama.toLowerCase()
+        );
+        tampilkanProduk();
+      }
+
+      // Event Listener
+      document.getElementById("btnTambah").addEventListener("click", () => {
+        const nama = document.getElementById("nama").value;
+        const harga = parseInt(document.getElementById("harga").value);
+        const stok = parseInt(document.getElementById("stok").value);
+
+        if (nama && harga && stok) {
+          tambahProduk({ nama, harga, stok });
+          document.getElementById("nama").value = "";
+          document.getElementById("harga").value = "";
+          document.getElementById("stok").value = "";
+        } else {
+          alert("Lengkapi data produk!");
+        }
+      });
+
+      document.getElementById("btnHapus").addEventListener("click", () => {
+        const nama = document.getElementById("hapusNama").value;
+        if (nama) {
+          hapusProduk(nama);
+          document.getElementById("hapusNama").value = "";
+        } else {
+          alert("Masukkan nama produk yang ingin dihapus!");
+        }
+      });
+
+      // menampilkan produk awal
+      tampilkanProduk();
+    </script>
+  </body>
+</html>
