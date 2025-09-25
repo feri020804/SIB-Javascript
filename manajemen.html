@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Manajemen Transportasi</title>
+  </head>
+  <body>
+    <h2>Daftar Penyewaan Kendaraan</h2>
+
+    <!-- Form untuk input pelanggan -->
+    <div>
+      <input type="text" id="nama" placeholder="Nama Pelanggan" />
+      <input type="text" id="telepon" placeholder="Nomor Telepon" />
+      <select id="kendaraan">
+        <option value="Mobil">Mobil</option>
+        <option value="Motor">Motor</option>
+        <option value="Bus">Bus</option>
+      </select>
+      <button onclick="tambahPelanggan()">Sewa Kendaraan</button>
+    </div>
+
+    <!-- Daftar pelanggan -->
+    <ul id="daftarPelanggan"></ul>
+
+    <script>
+      // Class induk
+      class Kendaraan {
+        constructor(nama) {
+          this.nama = nama;
+        }
+        info() {
+          return this.nama;
+        }
+      }
+
+      // Class turunan
+      class Mobil extends Kendaraan {
+        constructor() {
+          super("Mobil");
+        }
+      }
+
+      class Motor extends Kendaraan {
+        constructor() {
+          super("Motor");
+        }
+      }
+
+      class Bus extends Kendaraan {
+        constructor() {
+          super("Bus");
+        }
+      }
+
+      // Class Pelanggan
+      class Pelanggan {
+        constructor(nama, nomorTelepon, kendaraanDisewa) {
+          this.nama = nama;
+          this.nomorTelepon = nomorTelepon;
+          this.kendaraanDisewa = kendaraanDisewa;
+        }
+
+        getInfo() {
+          return `${this.nama} (${
+            this.nomorTelepon
+          }) menyewa ${this.kendaraanDisewa.info()}`;
+        }
+      }
+
+      // Array untuk menampung pelanggan
+      let daftarPelanggan = [];
+
+      // Fungsi untuk menambah pelanggan baru
+      function tambahPelanggan() {
+        let nama = document.getElementById("nama").value;
+        let telepon = document.getElementById("telepon").value;
+        let pilihan = document.getElementById("kendaraan").value;
+
+        let kendaraan;
+        if (pilihan === "Mobil") kendaraan = new Mobil();
+        else if (pilihan === "Motor") kendaraan = new Motor();
+        else kendaraan = new Bus();
+
+        // Buat objek pelanggan baru
+        let pelangganBaru = new Pelanggan(nama, telepon, kendaraan);
+        daftarPelanggan.push(pelangganBaru);
+
+        // Update daftar di DOM
+        tampilkanPelanggan();
+      }
+
+      // Fungsi untuk menampilkan daftar pelanggan di DOM
+      function tampilkanPelanggan() {
+        let list = document.getElementById("daftarPelanggan");
+        list.innerHTML = ""; // reset
+
+        daftarPelanggan.forEach((p) => {
+          let item = document.createElement("li");
+          item.innerText = p.getInfo();
+          list.appendChild(item);
+        });
+      }
+    </script>
+  </body>
+</html>
